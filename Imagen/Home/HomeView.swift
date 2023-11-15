@@ -9,50 +9,52 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack(alignment: .center, spacing: 50) {
-            
-            title
-                .padding(.top, 40)
-            
-            Spacer()
+        NavigationStack {
+            VStack(alignment: .center, spacing: 50) {
+                title
+                    .padding(.top, 40)
                 
-            
-            newImageButton
-            
-            existingResultButton
+                Spacer()
+                
+                newImageButton
+                
+                // TODO: Show only if user has existing result
+                existingResultButton
+            }
+            .padding(.vertical, 100)
+            .ignoresSafeArea()
         }
-        .padding(.vertical, 100)
-        .ignoresSafeArea()
-
     }
-    
+
     private var title: some View {
         Text("Imagen")
             .font(.largeTitle)
             .bold()
     }
-    
+
     private var newImageButton: some View {
-        Button {
-            // TODO: Implement
+        NavigationLink {
+            CameraView()
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 10.0)
                     .frame(width: 250, height: 60)
                 Text("New Image")
+                    .bold()
                     .foregroundStyle(.background)
             }
         }
     }
-    
+
     private var existingResultButton: some View {
-        Button {
-            // TODO: Implement
+        NavigationLink {
+            ResultsView()
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 10.0)
                     .frame(width: 250, height: 60)
                 Text("Existing Result")
+                    .bold()
                     .foregroundStyle(.background)
             }
         }
