@@ -9,39 +9,64 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .center, spacing: 50) {
-                title
-                    .padding(.top, 40)
-                
-                Spacer()
-                
-                newImageButton
-                
-                // TODO: Show only if user has existing result
-                existingResultButton
+        GeometryReader { proxy in
+            NavigationStack {
+                ZStack {
+                    Group {
+                        Rectangle()
+                            .frame(height: 2)
+                            .tint(.primary)
+
+                        Image("icon_transparent")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 150)
+                            .offset(x: proxy.size.width / 4.25, y: -35)
+                            .tint(.primary)
+                    }
+                    .offset(y: -(proxy.size.height / 4.25))
+
+                    VStack(alignment: .leading, spacing: 0.0) {
+                        title
+                        subTitle
+                            .padding(.bottom, 70.0)
+
+                        newImageButton
+                            .padding(.bottom, 30.0)
+
+                        // TODO: Show only if user has existing result
+                        existingResultButton
+                    }
+                    .padding(.top, 100.0)
+                    .frame(maxWidth: proxy.size.width * 0.6)
+                }
             }
-            .padding(.vertical, 100)
-            .ignoresSafeArea()
         }
     }
 
     private var title: some View {
         Text("Imagen")
-            .font(.largeTitle)
-            .bold()
+            .font(Font.system(size: 40.0, weight: .bold, design: .monospaced))
+    }
+
+    private var subTitle: some View {
+        Text("Upcycling powered by AI.")
+            .font(Font.system(.subheadline, design: .monospaced, weight: .light))
+            .padding(.leading, 2.5)
     }
 
     private var newImageButton: some View {
         NavigationLink {
             CameraView()
         } label: {
-            ZStack {
+            ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 10.0)
-                    .frame(width: 250, height: 60)
+                    .foregroundStyle(.green)
+                    .frame(height: 60)
                 Text("New Image")
-                    .bold()
+                    .font(Font.system(size: 16.0, weight: .semibold, design: .monospaced))
                     .foregroundStyle(.background)
+                    .padding(.leading)
             }
         }
     }
@@ -50,12 +75,14 @@ struct HomeView: View {
         NavigationLink {
             ResultsView()
         } label: {
-            ZStack {
+            ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 10.0)
-                    .frame(width: 250, height: 60)
+                    .frame(height: 60.0)
+                    .foregroundStyle(.gray)
                 Text("Existing Result")
-                    .bold()
+                    .font(Font.system(size: 16.0, weight: .semibold, design: .monospaced))
                     .foregroundStyle(.background)
+                    .padding(.leading)
             }
         }
     }
