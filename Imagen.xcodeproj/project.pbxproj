@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A528FF622B05DDFB00162804 /* PhotoAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A528FF562B05DDFA00162804 /* PhotoAsset.swift */; };
-		A528FF632B05DDFB00162804 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A528FF572B05DDFA00162804 /* DataModel.swift */; };
+		A528FF632B05DDFB00162804 /* CameraView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A528FF572B05DDFA00162804 /* CameraView+ViewModel.swift */; };
 		A528FF642B05DDFB00162804 /* PhotoCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A528FF582B05DDFA00162804 /* PhotoCollectionView.swift */; };
 		A528FF652B05DDFB00162804 /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A528FF592B05DDFA00162804 /* ThumbnailView.swift */; };
 		A528FF662B05DDFB00162804 /* ViewfinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A528FF5A2B05DDFA00162804 /* ViewfinderView.swift */; };
@@ -29,7 +29,7 @@
 
 /* Begin PBXFileReference section */
 		A528FF562B05DDFA00162804 /* PhotoAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAsset.swift; sourceTree = "<group>"; };
-		A528FF572B05DDFA00162804 /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		A528FF572B05DDFA00162804 /* CameraView+ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CameraView+ViewModel.swift"; sourceTree = "<group>"; };
 		A528FF582B05DDFA00162804 /* PhotoCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCollectionView.swift; sourceTree = "<group>"; };
 		A528FF592B05DDFA00162804 /* ThumbnailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
 		A528FF5A2B05DDFA00162804 /* ViewfinderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewfinderView.swift; sourceTree = "<group>"; };
@@ -113,7 +113,7 @@
 				A528FF5F2B05DDFA00162804 /* CachedImageManager.swift */,
 				A528FF702B05DEA100162804 /* Camera.swift */,
 				A528FF6E2B05DE3B00162804 /* CameraView.swift */,
-				A528FF572B05DDFA00162804 /* DataModel.swift */,
+				A528FF572B05DDFA00162804 /* CameraView+ViewModel.swift */,
 				A528FF562B05DDFA00162804 /* PhotoAsset.swift */,
 				A528FF602B05DDFB00162804 /* PhotoAssetCollection.swift */,
 				A528FF5E2B05DDFA00162804 /* PhotoCollection.swift */,
@@ -208,7 +208,7 @@
 				A528FF712B05DEA100162804 /* Camera.swift in Sources */,
 				A528FF6B2B05DDFB00162804 /* CachedImageManager.swift in Sources */,
 				A528FF672B05DDFB00162804 /* PhotoItemView.swift in Sources */,
-				A528FF632B05DDFB00162804 /* DataModel.swift in Sources */,
+				A528FF632B05DDFB00162804 /* CameraView+ViewModel.swift in Sources */,
 				A528FF682B05DDFB00162804 /* PhotoLibrary.swift in Sources */,
 				A571543C2B055B2400617D71 /* ResultsView.swift in Sources */,
 				A528FF622B05DDFB00162804 /* PhotoAsset.swift in Sources */,

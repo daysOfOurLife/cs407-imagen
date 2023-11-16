@@ -7,16 +7,14 @@
 import SwiftUI
 
 struct CameraView: View {
-    @StateObject private var model = DataModel()
- 
+    @State private var viewModel = ViewModel()
+
     private static let barHeightFactor = 0.15
-    
-    
+
     var body: some View {
-        
         NavigationStack {
             GeometryReader { geometry in
-                ViewfinderView(image:  $model.viewfinderImage )
+                ViewfinderView(image: $viewModel.viewfinderImage)
                     .overlay(alignment: .top) {
                         Color.black
                             .opacity(0.75)
@@ -27,7 +25,7 @@ struct CameraView: View {
                             .frame(height: geometry.size.height * Self.barHeightFactor)
                             .background(.black.opacity(0.75))
                     }
-                    .overlay(alignment: .center)  {
+                    .overlay(alignment: .center) {
                         Color.clear
                             .frame(height: geometry.size.height * (1 - (Self.barHeightFactor * 2)))
                             .accessibilityElement()
@@ -37,39 +35,38 @@ struct CameraView: View {
                     .background(.black)
             }
             .task {
-                await model.camera.start()
-                await model.loadPhotos()
-                await model.loadThumbnail()
+                await viewModel.camera.start()
+                await viewModel.loadPhotos()
+                await viewModel.loadThumbnail()
             }
             .navigationBarTitleDisplayMode(.inline)
             .ignoresSafeArea()
             .statusBar(hidden: true)
         }
     }
-    
+
     private func buttonsView() -> some View {
         HStack(spacing: 60) {
-            
             Spacer()
-            
+
             NavigationLink {
-                PhotoCollectionView(photoCollection: model.photoCollection)
+                PhotoCollectionView(photoCollection: viewModel.photoCollection)
                     .onAppear {
-                        model.camera.isPreviewPaused = true
+                        viewModel.camera.isPreviewPaused = true
                     }
                     .onDisappear {
-                        model.camera.isPreviewPaused = false
+                        viewModel.camera.isPreviewPaused = false
                     }
             } label: {
                 Label {
                     Text("Gallery")
                 } icon: {
-                    ThumbnailView(image: model.thumbnailImage)
+                    ThumbnailView(image: viewModel.thumbnailImage)
                 }
             }
-            
+
             Button {
-                model.camera.takePhoto()
+                viewModel.camera.takePhoto()
             } label: {
                 Label {
                     Text("Take Photo")
@@ -84,21 +81,19 @@ struct CameraView: View {
                     }
                 }
             }
-            
+
             Button {
-                model.camera.switchCaptureDevice()
+                viewModel.camera.switchCaptureDevice()
             } label: {
                 Label("Switch Camera", systemImage: "arrow.triangle.2.circlepath")
                     .font(.system(size: 36, weight: .bold))
                     .foregroundColor(.white)
             }
-            
+
             Spacer()
-        
         }
         .buttonStyle(.plain)
         .labelStyle(.iconOnly)
         .padding()
     }
-    
 }
