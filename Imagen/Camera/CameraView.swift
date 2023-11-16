@@ -17,8 +17,8 @@ struct CameraView: View {
                 ViewfinderView(image: $viewModel.viewfinderImage)
                     .overlay(alignment: .top) {
                         Color.black
-                            .opacity(0.75)
-                            .frame(height: geometry.size.height * Self.barHeightFactor)
+                            .opacity(0.90)
+                            .frame(height: geometry.size.height * Self.barHeightFactor / 1.2)
                     }
                     .overlay(alignment: .center) {
                         Color.clear
@@ -29,8 +29,8 @@ struct CameraView: View {
                     }
                     .overlay(alignment: .bottom) {
                         buttonsView()
-                            .frame(height: geometry.size.height * Self.barHeightFactor)
-                            .background(.black.opacity(0.75))
+                            .frame(height: geometry.size.height * Self.barHeightFactor * 1.25)
+                            .background(.black.opacity(0.90))
                     }
                     .background(.black)
             }
