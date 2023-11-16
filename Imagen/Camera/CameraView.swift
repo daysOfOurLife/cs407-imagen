@@ -9,7 +9,7 @@ import SwiftUI
 struct CameraView: View {
     @State private var viewModel = ViewModel()
 
-    private static let barHeightFactor = 0.15
+    private static let barHeightFactor = 0.175
 
     var body: some View {
         NavigationStack {
@@ -20,17 +20,17 @@ struct CameraView: View {
                             .opacity(0.75)
                             .frame(height: geometry.size.height * Self.barHeightFactor)
                     }
-                    .overlay(alignment: .bottom) {
-                        buttonsView()
-                            .frame(height: geometry.size.height * Self.barHeightFactor)
-                            .background(.black.opacity(0.75))
-                    }
                     .overlay(alignment: .center) {
                         Color.clear
                             .frame(height: geometry.size.height * (1 - (Self.barHeightFactor * 2)))
                             .accessibilityElement()
                             .accessibilityLabel("View Finder")
                             .accessibilityAddTraits([.isImage])
+                    }
+                    .overlay(alignment: .bottom) {
+                        buttonsView()
+                            .frame(height: geometry.size.height * Self.barHeightFactor)
+                            .background(.black.opacity(0.75))
                     }
                     .background(.black)
             }
@@ -74,10 +74,10 @@ struct CameraView: View {
                     ZStack {
                         Circle()
                             .strokeBorder(.white, lineWidth: 3)
-                            .frame(width: 62, height: 62)
+                            .frame(width: 72, height: 72)
                         Circle()
                             .fill(.white)
-                            .frame(width: 50, height: 50)
+                            .frame(width: 60, height: 60)
                     }
                 }
             }
@@ -95,5 +95,6 @@ struct CameraView: View {
         .buttonStyle(.plain)
         .labelStyle(.iconOnly)
         .padding()
+        .padding(.bottom, 25.0)
     }
 }
