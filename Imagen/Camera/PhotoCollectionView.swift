@@ -8,7 +8,7 @@ import SwiftUI
 import os.log
 
 struct PhotoCollectionView: View {
-    @ObservedObject var photoCollection : PhotoCollection
+    @State var photoCollection : PhotoCollection
     
     @Environment(\.displayScale) private var displayScale
         

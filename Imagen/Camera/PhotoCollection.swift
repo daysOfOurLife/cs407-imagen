@@ -5,11 +5,12 @@
 //
 
 import Photos
+import Observation
 import os.log
 
-class PhotoCollection: NSObject, ObservableObject {
+@Observable class PhotoCollection: NSObject {
     
-    @Published var photoAssets: PhotoAssetCollection = PhotoAssetCollection(PHFetchResult<PHAsset>())
+    var photoAssets: PhotoAssetCollection = PhotoAssetCollection(PHFetchResult<PHAsset>())
     
     var identifier: String? {
         assetCollection?.localIdentifier
