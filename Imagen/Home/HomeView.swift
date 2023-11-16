@@ -8,31 +8,21 @@
 import SwiftUI
 
 struct HomeView: View {
+    // MARK: Properties
+
+    // MARK: Body
+
     var body: some View {
         GeometryReader { proxy in
             NavigationStack {
                 ZStack {
-                    Group {
-                        Rectangle()
-                            .frame(height: 2)
-                            .tint(.primary)
-
-                        Image("icon_transparent")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 150)
-                            .offset(x: proxy.size.width / 4.25, y: -35)
-                            .tint(.primary)
-                    }
-                    .offset(y: -(proxy.size.height / 4.25))
+                    logoArt(proxy: proxy)
 
                     VStack(alignment: .leading, spacing: 0.0) {
                         title
                         subTitle
-                            .padding(.bottom, 70.0)
 
                         newImageButton
-                            .padding(.bottom, 30.0)
 
                         // TODO: Show only if user has existing result
                         existingResultButton
@@ -45,6 +35,24 @@ struct HomeView: View {
         }
     }
 
+    // MARK: Subviews
+
+    private func logoArt(proxy: GeometryProxy) -> some View {
+        Group {
+            Rectangle()
+                .frame(height: 2)
+                .tint(.primary)
+
+            Image("icon_transparent")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 150)
+                .offset(x: proxy.size.width / 4.25, y: -35)
+                .tint(.primary)
+        }
+        .offset(y: -(proxy.size.height / 4.25))
+    }
+
     private var title: some View {
         Text("Imagen")
             .font(Font.system(size: 40.0, weight: .bold, design: .monospaced))
@@ -54,6 +62,7 @@ struct HomeView: View {
         Text("Upcycling powered by AI.")
             .font(Font.system(.subheadline, design: .monospaced, weight: .light))
             .padding(.leading, 2.5)
+            .padding(.bottom, 70.0)
     }
 
     private var newImageButton: some View {
@@ -69,6 +78,7 @@ struct HomeView: View {
                     .foregroundStyle(.background)
                     .padding(.leading)
             }
+            .padding(.bottom, 30.0)
         }
     }
 
