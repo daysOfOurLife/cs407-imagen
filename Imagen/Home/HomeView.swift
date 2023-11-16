@@ -41,6 +41,7 @@ struct HomeView: View {
                     .frame(maxWidth: proxy.size.width * 0.6)
                 }
             }
+            .tint(.green)
         }
     }
 
