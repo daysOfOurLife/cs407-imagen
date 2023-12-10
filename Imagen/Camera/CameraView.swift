@@ -9,92 +9,97 @@ import SwiftUI
 struct CameraView: View {
     @State private var viewModel = ViewModel()
 
-    private static let barHeightFactor = 0.175
-
     var body: some View {
         NavigationStack {
-            GeometryReader { geometry in
+            ZStack {
                 ViewfinderView(image: $viewModel.viewfinderImage)
-                    .overlay(alignment: .top) {
-                        Color.black
-                            .opacity(0.90)
-                            .frame(height: geometry.size.height * Self.barHeightFactor / 1.2)
+                    .task {
+                        await viewModel.camera.start()
+                        await viewModel.loadPhotos()
+                        await viewModel.loadThumbnail()
                     }
-                    .overlay(alignment: .center) {
-                        Color.clear
-                            .frame(height: geometry.size.height * (1 - (Self.barHeightFactor * 2)))
-                            .accessibilityElement()
-                            .accessibilityLabel("View Finder")
-                            .accessibilityAddTraits([.isImage])
-                    }
-                    .overlay(alignment: .bottom) {
-                        buttonsView()
-                            .frame(height: geometry.size.height * Self.barHeightFactor * 1.25)
-                            .background(.black.opacity(0.90))
-                    }
-                    .background(.black)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .ignoresSafeArea()
+                    .statusBar(hidden: true)
+
+                VStack {
+                    Spacer()
+
+                    buttonStack
+                }
             }
-            .task {
-                await viewModel.camera.start()
-                await viewModel.loadPhotos()
-                await viewModel.loadThumbnail()
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .ignoresSafeArea()
-            .statusBar(hidden: true)
+            .background(.black)
+        }
+        .onAppear() {
+            viewModel.camera.isPhotoTaken = false
         }
     }
 
-    private func buttonsView() -> some View {
-        HStack(spacing: 60) {
-            Spacer()
+    // MARK: Subviews
 
-            NavigationLink {
-                PhotoCollectionView(photoCollection: viewModel.photoCollection)
-                    .onAppear {
-                        viewModel.camera.isPreviewPaused = true
-                    }
-                    .onDisappear {
-                        viewModel.camera.isPreviewPaused = false
-                    }
-            } label: {
-                Label {
-                    Text("Gallery")
-                } icon: {
-                    ThumbnailView(image: viewModel.thumbnailImage)
-                }
+    private var buttonStack: some View {
+        HStack {
+            if viewModel.camera.isPhotoTaken {
+                retakePhotoButton
+                
+                Spacer()
+
+                upcycleButton
+            } else {
+                takePhotoButton
             }
-
-            Button {
-                viewModel.camera.takePhoto()
-            } label: {
-                Label {
-                    Text("Take Photo")
-                } icon: {
-                    ZStack {
-                        Circle()
-                            .strokeBorder(.white, lineWidth: 3)
-                            .frame(width: 72, height: 72)
-                        Circle()
-                            .fill(.white)
-                            .frame(width: 60, height: 60)
-                    }
-                }
-            }
-
-            Button {
-                viewModel.camera.switchCaptureDevice()
-            } label: {
-                Label("Switch Camera", systemImage: "arrow.triangle.2.circlepath")
-                    .font(.system(size: 36, weight: .bold))
-                    .foregroundColor(.white)
-            }
-
-            Spacer()
         }
         .buttonStyle(.plain)
         .labelStyle(.iconOnly)
-        .padding()
-        .padding(.bottom, 25.0)
+        .padding(.horizontal)
     }
+
+    private var retakePhotoButton: some View {
+        Button {
+            viewModel.camera.retakePhoto()
+        } label: {
+            Image(systemName: "arrow.triangle.2.circlepath.camera")
+                .foregroundStyle(.black)
+                .padding()
+                .background(Color.white)
+                .clipShape(Circle())
+        }
+    }
+
+    private var takePhotoButton: some View {
+        Button {
+            viewModel.camera.takePhoto()
+        } label: {
+            Label {
+                Text("Take Photo")
+            } icon: {
+                ZStack {
+                    Circle()
+                        .strokeBorder(.white, lineWidth: 3)
+                        .frame(width: 72, height: 72)
+                    Circle()
+                        .fill(.white)
+                        .frame(width: 60, height: 60)
+                }
+            }
+        }
+    }
+
+    private var upcycleButton: some View {
+        Button {
+            // TODO: Save image and send to API
+        } label: {
+            Text("Upcycle")
+                .foregroundStyle(.black)
+                .fontWeight(.semibold)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 20)
+                .background(Color.white)
+                .clipShape(Capsule())
+        }
+    }
+}
+
+#Preview {
+    CameraView()
 }

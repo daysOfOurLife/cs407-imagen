@@ -6,10 +6,11 @@
 
 import AVFoundation
 import CoreImage
+import SwiftUI
 import UIKit
 import os.log
 
-class Camera: NSObject {
+@Observable class Camera: NSObject {
     private let captureSession = AVCaptureSession()
     private var isCaptureSessionConfigured = false
     private var deviceInput: AVCaptureDeviceInput?
@@ -82,7 +83,9 @@ class Camera: NSObject {
     
     var isPreviewPaused = false
     
-    lazy var previewStream: AsyncStream<CIImage> = {
+    var isPhotoTaken = false
+    
+    @ObservationIgnored lazy var previewStream: AsyncStream<CIImage> = {
         AsyncStream { continuation in
             addToPreviewStream = { ciImage in
                 if !self.isPreviewPaused {
@@ -92,7 +95,7 @@ class Camera: NSObject {
         }
     }()
     
-    lazy var photoStream: AsyncStream<AVCapturePhoto> = {
+    @ObservationIgnored lazy var photoStream: AsyncStream<AVCapturePhoto> = {
         AsyncStream { continuation in
             addToPhotoStream = { photo in
                 continuation.yield(photo)
@@ -291,9 +294,9 @@ class Camera: NSObject {
     private func videoOrientationFor(_ deviceOrientation: UIDeviceOrientation) -> AVCaptureVideoOrientation? {
         switch deviceOrientation {
         case .portrait: return AVCaptureVideoOrientation.portrait
-        case .portraitUpsideDown: return AVCaptureVideoOrientation.portraitUpsideDown
-        case .landscapeLeft: return AVCaptureVideoOrientation.landscapeRight
-        case .landscapeRight: return AVCaptureVideoOrientation.landscapeLeft
+        case .portraitUpsideDown: return AVCaptureVideoOrientation.portrait
+        case .landscapeLeft: return AVCaptureVideoOrientation.portrait
+        case .landscapeRight: return AVCaptureVideoOrientation.portrait
         default: return nil
         }
     }
@@ -325,6 +328,19 @@ class Camera: NSObject {
             }
             
             photoOutput.capturePhoto(with: photoSettings, delegate: self)
+            withAnimation(.smooth) {
+                self.isPhotoTaken.toggle()
+            }
+            self.captureSession.stopRunning()
+        }
+    }
+    
+    func retakePhoto() {
+        sessionQueue.async {
+            self.captureSession.startRunning()
+            withAnimation(.smooth) {
+                self.isPhotoTaken.toggle()
+            }
         }
     }
 }
