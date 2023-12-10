@@ -7,7 +7,11 @@
 import SwiftUI
 
 struct CameraView: View {
+    // MARK: Properties
+    
     @State private var viewModel = ViewModel()
+    
+    // MARK: Body
 
     var body: some View {
         NavigationStack {
@@ -27,6 +31,7 @@ struct CameraView: View {
 
                     buttonStack
                 }
+                .padding(.bottom)
             }
             .background(.black)
         }
@@ -51,7 +56,7 @@ struct CameraView: View {
         }
         .buttonStyle(.plain)
         .labelStyle(.iconOnly)
-        .padding(.horizontal)
+        .padding(.horizontal, 30)
     }
 
     private var retakePhotoButton: some View {
@@ -70,24 +75,30 @@ struct CameraView: View {
         Button {
             viewModel.camera.takePhoto()
         } label: {
-            Label {
-                Text("Take Photo")
-            } icon: {
-                ZStack {
-                    Circle()
-                        .strokeBorder(.white, lineWidth: 3)
-                        .frame(width: 72, height: 72)
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 60, height: 60)
-                }
+            ZStack {
+                Circle()
+                    .strokeBorder(.white, lineWidth: 3)
+                    .frame(width: 72, height: 72)
+                Circle()
+                    .fill(.white)
+                    .frame(width: 60, height: 60)
             }
         }
     }
 
     private var upcycleButton: some View {
-        Button {
-            // TODO: Save image and send to API
+        NavigationLink {
+            
+            // TODO: Send photoData to API
+            
+            VStack {
+                if let uiImage = UIImage(data: viewModel.camera.photoData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 350)
+                }
+            }
         } label: {
             Text("Upcycle")
                 .foregroundStyle(.black)
