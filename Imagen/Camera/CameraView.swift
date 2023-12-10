@@ -19,8 +19,6 @@ struct CameraView: View {
                 ViewfinderView(image: $viewModel.viewfinderImage)
                     .task {
                         await viewModel.camera.start()
-                        await viewModel.loadPhotos()
-                        await viewModel.loadThumbnail()
                     }
                     .navigationBarTitleDisplayMode(.inline)
                     .ignoresSafeArea()

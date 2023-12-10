@@ -12,7 +12,6 @@ import SwiftUI
 extension CameraView {
     @Observable final class ViewModel {
         let camera = Camera()
-        let photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
 
         var viewfinderImage: Image?
         var thumbnailImage: Image?
@@ -52,7 +51,6 @@ extension CameraView {
                 Task { @MainActor in
                     thumbnailImage = photoData.thumbnailImage
                 }
-                savePhoto(imageData: photoData.imageData)
             }
         }
 
@@ -71,48 +69,6 @@ extension CameraView {
             let thumbnailSize = (width: Int(previewDimensions.width), height: Int(previewDimensions.height))
 
             return PhotoData(thumbnailImage: thumbnailImage, thumbnailSize: thumbnailSize, imageData: imageData, imageSize: imageSize)
-        }
-
-        func savePhoto(imageData: Data) {
-            Task {
-                do {
-                    try await photoCollection.addImage(imageData)
-                    logger.debug("Added image data to photo collection.")
-                } catch let error {
-                    logger.error("Failed to add image to photo collection: \(error.localizedDescription)")
-                }
-            }
-        }
-
-        func loadPhotos() async {
-            guard !isPhotosLoaded else { return }
-
-            let authorized = await PhotoLibrary.checkAuthorization()
-            guard authorized else {
-                logger.error("Photo library access was not authorized.")
-                return
-            }
-
-            Task {
-                do {
-                    try await self.photoCollection.load()
-                    await self.loadThumbnail()
-                } catch let error {
-                    logger.error("Failed to load photo collection: \(error.localizedDescription)")
-                }
-                self.isPhotosLoaded = true
-            }
-        }
-
-        func loadThumbnail() async {
-            guard let asset = photoCollection.photoAssets.first else { return }
-            await photoCollection.cache.requestImage(for: asset, targetSize: CGSize(width: 256, height: 256)) { result in
-                if let result = result {
-                    Task { @MainActor in
-                        self.thumbnailImage = result.image
-                    }
-                }
-            }
         }
     }
 }
