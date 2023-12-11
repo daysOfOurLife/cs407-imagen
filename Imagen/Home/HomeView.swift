@@ -84,7 +84,7 @@ struct HomeView: View {
 
     private var existingResultButton: some View {
         NavigationLink {
-            ResultsView()
+           // ResultsView()
         } label: {
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 10.0)

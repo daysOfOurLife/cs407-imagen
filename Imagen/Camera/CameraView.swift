@@ -84,18 +84,41 @@ struct CameraView: View {
         }
     }
 
+//    private var upcycleButton: some View {
+//        NavigationLink {
+//            
+//            // TODO: Send photoData to API
+//            
+//         //   ResultsView(capturedImage: UIImage(data: viewModel.camera.photoData))
+//            
+//            VStack {
+//                if let uiImage = UIImage(data: viewModel.camera.photoData) {
+//                    Image(uiImage: uiImage)
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(height: 350)
+//                }
+//            }
+//        } label: {
+//            Text("Upcycle")
+//                .foregroundStyle(.black)
+//                .fontWeight(.semibold)
+//                .padding(.vertical, 10)
+//                .padding(.horizontal, 20)
+//                .background(Color.white)
+//                .clipShape(Capsule())
+//        }
+//    }
+    
     private var upcycleButton: some View {
         NavigationLink {
-            
-            // TODO: Send photoData to API
-            
-            VStack {
-                if let uiImage = UIImage(data: viewModel.camera.photoData) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 350)
-                }
+            // Check if the UIImage can be created from photoData
+            if let uiImage = UIImage(data: viewModel.camera.photoData) {
+                // Pass the uiImage to ResultsView
+                ResultsView(capturedImage: uiImage)
+            } else {
+                // Handle the case where the image could not be created
+                Text("Image not available")
             }
         } label: {
             Text("Upcycle")
@@ -107,6 +130,7 @@ struct CameraView: View {
                 .clipShape(Capsule())
         }
     }
+
 }
 
 #Preview {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9CBABF0D2B277B99004E0A77 /* ChatGPTService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBABF0C2B277B99004E0A77 /* ChatGPTService.swift */; };
+		9CBABF0F2B277BE6004E0A77 /* ChatGPTViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBABF0E2B277BE6004E0A77 /* ChatGPTViewModel.swift */; };
 		A513DAF82B254DEC0058A0F0 /* ViewfinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A513DAF72B254DEC0058A0F0 /* ViewfinderView.swift */; };
 		A528FF632B05DDFB00162804 /* CameraView+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A528FF572B05DDFA00162804 /* CameraView+ViewModel.swift */; };
 		A528FF6F2B05DE3B00162804 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A528FF6E2B05DE3B00162804 /* CameraView.swift */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9CBABF0C2B277B99004E0A77 /* ChatGPTService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTService.swift; sourceTree = "<group>"; };
+		9CBABF0E2B277BE6004E0A77 /* ChatGPTViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTViewModel.swift; sourceTree = "<group>"; };
 		A513DAF72B254DEC0058A0F0 /* ViewfinderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewfinderView.swift; sourceTree = "<group>"; };
 		A528FF572B05DDFA00162804 /* CameraView+ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CameraView+ViewModel.swift"; sourceTree = "<group>"; };
 		A528FF6E2B05DE3B00162804 /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
@@ -104,6 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				A571543B2B055B2400617D71 /* ResultsView.swift */,
+				9CBABF0C2B277B99004E0A77 /* ChatGPTService.swift */,
+				9CBABF0E2B277BE6004E0A77 /* ChatGPTViewModel.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -181,6 +187,8 @@
 				A528FF712B05DEA100162804 /* Camera.swift in Sources */,
 				A528FF632B05DDFB00162804 /* CameraView+ViewModel.swift in Sources */,
 				A571543C2B055B2400617D71 /* ResultsView.swift in Sources */,
+				9CBABF0F2B277BE6004E0A77 /* ChatGPTViewModel.swift in Sources */,
+				9CBABF0D2B277B99004E0A77 /* ChatGPTService.swift in Sources */,
 				A54BF58B2AFA92A500E64E99 /* HomeView.swift in Sources */,
 				A54BF5892AFA92A500E64E99 /* ImagenApp.swift in Sources */,
 				A528FF6F2B05DE3B00162804 /* CameraView.swift in Sources */,
@@ -318,7 +326,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Imagen/Preview Content\"";
-				DEVELOPMENT_TEAM = F92594N6SU;
+				DEVELOPMENT_TEAM = RDC95W3KFK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Imagen/Info.plist;
@@ -349,7 +357,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Imagen/Preview Content\"";
-				DEVELOPMENT_TEAM = F92594N6SU;
+				DEVELOPMENT_TEAM = RDC95W3KFK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Imagen/Info.plist;
