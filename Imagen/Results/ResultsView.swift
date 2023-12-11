@@ -15,12 +15,12 @@ struct ResultsView: View {
     
 //    }
     
-    @StateObject private var viewModel = ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")) // Replace with your actual API key
+    @StateObject private var viewModel = ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")) // Replace with your actual API key
     private var capturedImage: UIImage?
     
     init(capturedImage: UIImage?) {
         self.capturedImage = capturedImage
-        _viewModel = StateObject(wrappedValue: ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")))
+        _viewModel = StateObject(wrappedValue: ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")))
         print("Image in ResultsView init:", capturedImage != nil ? "Valid" : "Nil")
     }
     

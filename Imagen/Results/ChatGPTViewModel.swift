@@ -15,7 +15,7 @@ class ChatGPTViewModel: ObservableObject {
 
     private let chatService: ChatGPTService
     
-   // let openAI = OpenAI(Configuration(organizationId: "Personal", apiKey: "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"))
+   // let openAI = OpenAI(Configuration(organizationId: "Personal", apiKey: "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"))
 
     init(chatService: ChatGPTService) {
         self.chatService = chatService
@@ -75,7 +75,7 @@ class ChatGPTViewModel: ObservableObject {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let body: [String: Any] = [
@@ -154,7 +154,9 @@ class ChatGPTViewModel: ObservableObject {
 
                         self?.titles = tempTitles
                         self?.descriptions = tempDescriptions
-                        self?.generateImagesForTitles()
+//                        self?.generateImagesForTitles() // TODO: Uncomment when done testing
+                        self?.isAnalyzingImage = false // TODO: remove after testing
+
 
                     case .failure(let error):
                         self?.response = "Error: \(error.localizedDescription)"
@@ -181,7 +183,7 @@ class ChatGPTViewModel: ObservableObject {
     }
     
     func analyzeImage(image: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
-        let AIQuestionair = "Can you identify the type of object in the image. Just a 1 - 3 word answer is perfect. We require the result to pass it into another instance to get upcycling ideas for. If you can identify the materail the item is made of it will be perfect as well"
+        let AIQuestionair = "Can you identify the type of object in the image. Just a 1 - 3 word answer is perfect. We require the result to pass it into another instance to get upcycling ideas for. If you can identify the material of the item is made of it will be perfect as well."
         let endpoint = "https://api.openai.com/v1/chat/completions"
         guard let url = URL(string: endpoint) else { return }
         guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
@@ -189,7 +191,7 @@ class ChatGPTViewModel: ObservableObject {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let contentPart1: [String: Any] = ["type": "text", "text": AIQuestionair]
