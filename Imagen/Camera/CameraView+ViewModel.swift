@@ -27,10 +27,6 @@ extension CameraView {
                 await handleCameraPhotos()
             }
         }
-        
-        func upcycle() {
-                // TODO: implement
-        }
 
         func handleCameraPreviews() async {
             let imageStream = camera.previewStream

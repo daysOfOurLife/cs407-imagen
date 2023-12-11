@@ -8,32 +8,28 @@ import SwiftUI
 
 struct CameraView: View {
     // MARK: Properties
-    
+
     @State private var viewModel = ViewModel()
-    
+
     // MARK: Body
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                ViewfinderView(image: $viewModel.viewfinderImage)
-                    .task {
-                        await viewModel.camera.start()
-                    }
-                    .navigationBarTitleDisplayMode(.inline)
-                    .ignoresSafeArea()
-                    .statusBar(hidden: true)
-
-                VStack {
-                    Spacer()
-
-                    buttonStack
+        ZStack {
+            ViewfinderView(image: $viewModel.viewfinderImage)
+                .task {
+                    await viewModel.camera.start()
                 }
-                .padding(.bottom)
+                .navigationBarTitleDisplayMode(.inline)
+                .ignoresSafeArea()
+                .statusBar(hidden: true)
+
+            VStack {
+                Spacer()
+                buttonStack
             }
-            .background(.black)
         }
-        .onAppear() {
+        .background(.black)
+        .onAppear {
             viewModel.camera.isPhotoTaken = false
         }
     }
@@ -42,30 +38,45 @@ struct CameraView: View {
 
     private var buttonStack: some View {
         HStack {
-            if viewModel.camera.isPhotoTaken {
-                retakePhotoButton
-                
-                Spacer()
-
-                upcycleButton
-            } else {
+            if !viewModel.camera.isPhotoTaken {
                 takePhotoButton
+            } else {
+                HStack(spacing: 25) {
+                    Spacer()
+                    retakePhotoButton
+
+                    Spacer()
+
+                    upcycleButton
+                    Spacer()
+                }
             }
         }
-        .buttonStyle(.plain)
-        .labelStyle(.iconOnly)
-        .padding(.horizontal, 30)
+        .padding(.bottom, 20)
+        .frame(height: 100)
     }
 
     private var retakePhotoButton: some View {
         Button {
             viewModel.camera.retakePhoto()
         } label: {
-            Image(systemName: "arrow.triangle.2.circlepath.camera")
-                .foregroundStyle(.black)
-                .padding()
-                .background(Color.white)
-                .clipShape(Circle())
+            VStack {
+                Text("Retake")
+                    .font(Font.system(size: 14.0, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(.white)
+
+                
+                ZStack {
+                    Capsule()
+                        .foregroundStyle(.white)
+                        .frame(width: 70, alignment: .center)
+                    Image(systemName: "gobackward")
+                        .fontWeight(.light)
+                        .scaleEffect(1.3)
+                        .foregroundStyle(.black)
+                }
+                
+            }
         }
     }
 
@@ -84,32 +95,6 @@ struct CameraView: View {
         }
     }
 
-//    private var upcycleButton: some View {
-//        NavigationLink {
-//            
-//            // TODO: Send photoData to API
-//            
-//         //   ResultsView(capturedImage: UIImage(data: viewModel.camera.photoData))
-//            
-//            VStack {
-//                if let uiImage = UIImage(data: viewModel.camera.photoData) {
-//                    Image(uiImage: uiImage)
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(height: 350)
-//                }
-//            }
-//        } label: {
-//            Text("Upcycle")
-//                .foregroundStyle(.black)
-//                .fontWeight(.semibold)
-//                .padding(.vertical, 10)
-//                .padding(.horizontal, 20)
-//                .background(Color.white)
-//                .clipShape(Capsule())
-//        }
-//    }
-    
     private var upcycleButton: some View {
         NavigationLink {
             // Check if the UIImage can be created from photoData
@@ -118,19 +103,27 @@ struct CameraView: View {
                 ResultsView(capturedImage: uiImage)
             } else {
                 // Handle the case where the image could not be created
-                Text("Image not available")
+                Text("Oops! There was an error capturing the image. Please try again.")
             }
         } label: {
-            Text("Upcycle")
-                .foregroundStyle(.black)
-                .fontWeight(.semibold)
-                .padding(.vertical, 10)
-                .padding(.horizontal, 20)
-                .background(Color.white)
-                .clipShape(Capsule())
+            VStack {
+                Text("Upcycle")
+                    .font(Font.system(size: 14.0, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(.green)
+
+                ZStack {
+                    Capsule()
+                        .foregroundStyle(.green)
+                        .frame(width: 70, alignment: .center)
+                    Image("icon_transparent")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(.black)
+                        .scaleEffect(1.25)
+                }
+            }
         }
     }
-
 }
 
 #Preview {
