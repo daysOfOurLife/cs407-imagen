@@ -18,6 +18,7 @@
 		A54BF58D2AFA92A700E64E99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A54BF58C2AFA92A700E64E99 /* Assets.xcassets */; };
 		A54BF5902AFA92A700E64E99 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A54BF58F2AFA92A700E64E99 /* Preview Assets.xcassets */; };
 		A571543C2B055B2400617D71 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A571543B2B055B2400617D71 /* ResultsView.swift */; };
+		A57290992B28AB800092258F /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57290982B28AB800092258F /* test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		A54BF58C2AFA92A700E64E99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A54BF58F2AFA92A700E64E99 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A571543B2B055B2400617D71 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
+		A57290982B28AB800092258F /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				A571543B2B055B2400617D71 /* ResultsView.swift */,
+				A57290982B28AB800092258F /* test.swift */,
 				9CBABF0C2B277B99004E0A77 /* ChatGPTService.swift */,
 				9CBABF0E2B277BE6004E0A77 /* ChatGPTViewModel.swift */,
 			);
@@ -187,6 +190,7 @@
 				A528FF712B05DEA100162804 /* Camera.swift in Sources */,
 				A528FF632B05DDFB00162804 /* CameraView+ViewModel.swift in Sources */,
 				A571543C2B055B2400617D71 /* ResultsView.swift in Sources */,
+				A57290992B28AB800092258F /* test.swift in Sources */,
 				9CBABF0F2B277BE6004E0A77 /* ChatGPTViewModel.swift in Sources */,
 				9CBABF0D2B277B99004E0A77 /* ChatGPTService.swift in Sources */,
 				A54BF58B2AFA92A500E64E99 /* HomeView.swift in Sources */,

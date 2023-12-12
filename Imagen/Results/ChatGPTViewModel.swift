@@ -73,7 +73,7 @@ class ChatGPTViewModel: ObservableObject {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer API-KEY", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let body: [String: Any] = [
@@ -113,7 +113,10 @@ class ChatGPTViewModel: ObservableObject {
         self.descriptions.removeAll()
         self.imageUrls.removeAll()
 
-        let modifiedInput = "So I need a response for an app that I am writing. Can you give me 1 ways to upcycle a \(userInput)? Think of ways that we can reuse the item as something else that it previously wasent, Can you add a small 250 - 300 word description to each of the ways that you give. Can you also add a space (a \n) between the idea and its following description. Can you skip out any formalities and provide me directly with the points. Can you number them like 1. 2. "
+//        let modifiedInput = "So I need a response for an app that I am writing. Can you give me 1 ways to upcycle a \(userInput)? Think of ways that we can reuse the item as something else that it previously wasent, Can you add a small 250 - 300 word description to each of the ways that you give. Can you also add a space (a \n) between the idea and its following description. Can you skip out any formalities and provide me directly with the points. Can you number them like 1. 2. "
+        
+        let modifiedInput = "Using the item provided \(userInput), I need 5 creative upcycling idea. Please suggest one innovative way the item can be repurposed into something new and different from its original use. Include a detailed description of the upcycling process and the new utility of the item. The description should be concise, around 350-450 words, and formatted with a clear separation between the title and the explanation. Begin with a numeric identifier followed by a period and the new use as the title. Then, add a newline and proceed with the description. Avoid any formalities in the response and get straight to the point."
+
 
         chatService.sendMessage(message: modifiedInput) { [weak self] result in
                 DispatchQueue.main.async {
@@ -152,9 +155,7 @@ class ChatGPTViewModel: ObservableObject {
 
                         self?.titles = tempTitles
                         self?.descriptions = tempDescriptions
-                        self?.generateImagesForTitles() // TODO: Uncomment when done testing
-//                        self?.isAnalyzingImage = false // TODO: remove after testing
-
+                        self?.generateImagesForTitles()
 
                     case .failure(let error):
                         self?.response = "Error: \(error.localizedDescription)"
@@ -181,7 +182,7 @@ class ChatGPTViewModel: ObservableObject {
     }
     
     func analyzeImage(image: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
-        let AIQuestionair = "Can you identify the type of object in the image. Just a 1 - 3 word answer is perfect. We require the result to pass it into another instance to get upcycling ideas for. If you can identify the material of the item is made of it will be perfect as well."
+        let AIQuestionair = "Can you identify the type of object in the image. Just a 1 - 3 word answer is perfect. We require the result to pass it into another instance to get upcycling ideas for. If you can identify the materail the item is made of it will be perfect as well"
         let endpoint = "https://api.openai.com/v1/chat/completions"
         guard let url = URL(string: endpoint) else { return }
         guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
@@ -189,7 +190,7 @@ class ChatGPTViewModel: ObservableObject {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer API-KEY", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let contentPart1: [String: Any] = ["type": "text", "text": AIQuestionair]

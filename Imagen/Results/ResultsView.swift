@@ -11,238 +11,210 @@ struct ResultsView: View {
     // MARK: Properties
 
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var viewModel = ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")) // Replace with your actual API key
+    @StateObject private var viewModel = ChatGPTViewModel(chatService: ChatGPTService(apiKey: "API-KEY")) // Replace with your actual API key
     private var capturedImage: UIImage?
 
     // MARK: Initializers
 
     init(capturedImage: UIImage?) {
         self.capturedImage = capturedImage
-        _viewModel = StateObject(wrappedValue: ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")))
+        _viewModel = StateObject(wrappedValue: ChatGPTViewModel(chatService: ChatGPTService(apiKey: "API-KEY")))
         print("Image in ResultsView init:", capturedImage != nil ? "Valid" : "Nil")
     }
 
     // MARK: Body
 
     var body: some View {
-        VStack {
-            if viewModel.isAnalyzingImage {
-                FallingLeafAnimationView()
-                    .frame(maxHeight: .infinity)
-                    .padding()
-            } else {
-                VStack(alignment: .leading, spacing: 8.0) {
-                    Text("Detected:")
-                        .font(Font.system(size: 24.0, weight: .bold, design: .monospaced))
-                    
-                    HStack {
-                        TextField("Unleash your creativity...", text: $viewModel.userInput)
-                            .textFieldStyle(.roundedBorder)
-                            .font(Font.system(size: 14.0, weight: .semibold, design: .monospaced))
-                        
+        GeometryReader { geometry in
+            VStack {
+                if !viewModel.isAnalyzingImage {
+                    loadingView
+                } else {
+                    heading
+
+                    paginatedView
+                }
+            }
+            .navigationBarBackButtonHidden()
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbar {
+                if !viewModel.isAnalyzingImage {
+                    ToolbarItem(placement: .principal) {
                         Button {
-                            viewModel.sendMessage()
-                            viewModel.userInput = "" // Clear the text field after sending
+                            dismiss()
                         } label: {
-                            Image(systemName: "arrow.counterclockwise.circle")
-                                .scaleEffect(1.25)
-                                .foregroundStyle(.green)
+                            Text("Results")
+                                .font(Font.system(size: 18.0, weight: .semibold, design: .monospaced))
+                                .tint(.primary)
                         }
-                        
                     }
-                    .foregroundStyle(.gray)
-                    
-                    Text("Edit above if something's not quite right.")
-                        .font(Font.system(size: 13.5, weight: .regular, design: .monospaced))
-                        .foregroundStyle(.gray)
 
-                }
-                .padding()
-
-                // Paginated View
-                TabView {
-                    ForEach(Array(zip(viewModel.titles.indices, viewModel.titles)), id: \.0) { index, title in
-                        VStack {
-
-                            Text(title)
-                                .font(Font.system(size: 16.0, weight: .bold, design: .monospaced))
-
-                            if viewModel.imageUrls.indices.contains(index) {
-                                let imageUrl = viewModel.imageUrls[index]
-                                AsyncImage(url: imageUrl) { imagePhase in
-                                    switch imagePhase {
-                                    case .empty:
-                                        ProgressView()
-                                    case let .success(image):
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                    case .failure:
-                                        Image(systemName: "photo")
-                                    @unknown default:
-                                        EmptyView()
-                                    }
-                                }
-                                .frame(width: 200, height: 200)
-                                .padding(.vertical)
-                            }
-
-                            if viewModel.descriptions.indices.contains(index) {
-                                Text(viewModel.descriptions[index])
-                                    .font(Font.system(size: 14.0, weight: .light, design: .monospaced))
-                            }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "leaf")
+                                .resizable()
+                                .scaledToFit()
+                                .bold()
+                                .tint(.primary)
                         }
-                        .padding()
-                        .padding(.bottom, 50)
-                    }
-                }
-                .tabViewStyle(PageTabViewStyle()) // Enables swiping
-                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always)) // Show page indicators
-            }
-        }
-        .navigationBarBackButtonHidden()
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbar {
-            if !viewModel.isAnalyzingImage {
-                ToolbarItem(placement: .principal) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("Results")
-                            .font(Font.system(size: 18.0, weight: .semibold, design: .monospaced))
-                            .tint(.primary)
-                    }
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "leaf")
-                            .resizable()
-                            .scaledToFit()
-                            .bold()
-                            .tint(.primary)
                     }
                 }
             }
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
-
         .onAppear {
             if let image = capturedImage {
                 print("Image is present, calling analyze function")
-               viewModel.analyzeImageAndUpdateUserInput(image: image)
+                viewModel.analyzeImageAndUpdateUserInput(image: image)
             } else {
                 print("No image found")
             }
         }
     }
+
+    private var loadingView: some View {
+        ZStack {
+            FallingLeafAnimationView()
+                .frame(maxHeight: .infinity)
+            Text("Loading your generated options")
+                .font(Font.system(size: 16.0, weight: .bold, design: .monospaced))
+                .foregroundColor(.white)
+                .padding()
+                .background(Color.black.opacity(0.7))
+                .cornerRadius(10)
+                .shadow(radius: 5)
+        }
+        .background(.green)
+    }
+
+    private var heading: some View {
+        VStack(alignment: .leading, spacing: 8.0) {
+            Text("Detected:")
+                .font(Font.system(size: 24.0, weight: .bold, design: .monospaced))
+
+            HStack {
+                TextField("Unleash your creativity...", text: $viewModel.userInput)
+                    .textFieldStyle(.roundedBorder)
+                    .font(Font.system(size: 14.0, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(.green)
+
+                Button {
+                    viewModel.sendMessage()
+                    viewModel.userInput = "" // Clear the text field after sending
+                } label: {
+                    Image(systemName: "arrow.counterclockwise.circle")
+                        .scaleEffect(1.25)
+                        .foregroundStyle(.green)
+                }
+            }
+
+            Text("Edit above if something's not quite right.")
+                .font(Font.system(size: 13.5, weight: .regular, design: .monospaced))
+                .foregroundStyle(.gray)
+        }
+        .padding()
+    }
+
+    private var paginatedView: some View {
+        // Paginated View
+        TabView {
+            ForEach(Array(zip(viewModel.titles.indices, viewModel.titles)), id: \.0) { index, title in
+                VStack {
+                    Text(title)
+                        .font(Font.system(size: 16.0, weight: .bold, design: .monospaced))
+
+                    if viewModel.imageUrls.indices.contains(index) {
+                        let imageUrl = viewModel.imageUrls[index]
+                        AsyncImage(url: imageUrl) { imagePhase in
+                            switch imagePhase {
+                            case .empty:
+                                ProgressView()
+                            case let .success(image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            case .failure:
+                                Image(systemName: "photo")
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                        .frame(width: 200, height: 200)
+                        .cornerRadius(8)
+                        .shadow(radius: 3)
+                        .padding(.vertical)
+                    }
+
+                    ScrollView {
+                        Text(viewModel.descriptions[index])
+                            .font(Font.system(size: 14.0, weight: .light, design: .monospaced))
+                    }
+                    .frame(maxHeight: .infinity)
+                }
+                .padding()
+                .padding(.bottom, 50)
+            }
+        }
+        .tabViewStyle(PageTabViewStyle()) // Enables swiping
+        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always)) // Show page indicators
+    }
 }
 
 // MARK: Subviews
 
-struct LeafImageView: View {
-    let swayRange: CGFloat
-
-    var body: some View {
-        Image("leaf5")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 60, height: 60)
-    }
-
-    init() {
-        swayRange = CGFloat.random(in: -30...30)
-    }
-}
-
-//struct FallingLeafAnimationView: View {
-//    let numberOfLeaves: Int = 15
-//    let minDuration: Double = 8   // Minimum duration for fall
-//    let maxDuration: Double = 15  // Maximum duration for fall
-//
-//    @State private var positions: [CGPoint] = []
-//    @State private var durations: [Double] = []
-//
-//    var body: some View {
-//        GeometryReader { geometry in
-//            ForEach(0..<numberOfLeaves, id: \.self) { index in
-//                LeafImageView()
-//                    .position(x: positions.count > index ? positions[index].x : geometry.size.width / 2,
-//                              y: positions.count > index ? positions[index].y : -50)
-//                    .onAppear {
-//                        withAnimation(
-//                            Animation.linear(duration: durations.count > index ? durations[index] : 10)
-//                                .repeatForever(autoreverses: false)
-//                                .delay(Double.random(in: 0...2))
-//                        ) {
-//                            if positions.count > index {
-//                                positions[index] = CGPoint(x: CGFloat.random(in: 20...geometry.size.width - 20),
-//                                                           y: geometry.size.height + 50)
-//                            }
-//                        }
-//                    }
-//            }
-//        }
-//        .onAppear {
-//            // Initialize positions and durations for all leaves
-//            for _ in 0..<numberOfLeaves {
-//                positions.append(CGPoint(x: CGFloat.random(in: 20...UIScreen.main.bounds.width - 20),
-//                                         y: CGFloat.random(in: -100...0)))
-//                durations.append(Double.random(in: minDuration...maxDuration))
-//            }
-//        }
-//    }
-//}
-
 struct FallingLeafAnimationView: View {
     let numberOfLeaves: Int = 10
-    let minDuration: Double = 8   // Minimum duration for fall
-    let maxDuration: Double = 15  // Maximum duration for fall
+    let minDuration: Double = 8
+    let maxDuration: Double = 15
+    let leafImageNames = ["leaf2", "leaf3"]
 
     @State private var positions: [CGPoint] = []
     @State private var durations: [Double] = []
 
+    init() {
+        // Initialize positions off-screen at the top and durations
+        _positions = State(initialValue: (0 ..< numberOfLeaves).map { _ in
+            CGPoint(x: CGFloat.random(in: 20 ... UIScreen.main.bounds.width - 20),
+                    y: -100) // Start slightly above the top of the screen
+        })
+        _durations = State(initialValue: (0 ..< numberOfLeaves).map { _ in
+            Double.random(in: minDuration ... maxDuration)
+        })
+    }
+
     var body: some View {
-        ZStack {
-            GeometryReader { geometry in
-                ForEach(0..<numberOfLeaves, id: \.self) { index in
-                    LeafImageView()
-                        .position(x: positions.count > index ? positions[index].x : geometry.size.width / 2,
-                                  y: positions.count > index ? positions[index].y : -50)
-                        .onAppear {
-                            withAnimation(
-                                Animation.linear(duration: durations.count > index ? durations[index] : 10)
-                                    .repeatForever(autoreverses: false)
-                                    .delay(Double.random(in: 0...2))
-                            ) {
-                                if positions.count > index {
-                                    positions[index] = CGPoint(x: CGFloat.random(in: 20...geometry.size.width - 20),
-                                                               y: geometry.size.height + 50)
-                                }
-                            }
+        GeometryReader { geometry in
+            ForEach(0 ..< numberOfLeaves, id: \.self) { index in
+                LeafImageView(imageName: leafImageNames.randomElement() ?? "leaf")
+                    .position(x: positions[index].x, y: positions[index].y)
+                    .onAppear {
+                        withAnimation(getAnimation(for: index)) {
+                            positions[index].y = geometry.size.height + 50 // Animate to fall off the bottom of the screen
                         }
-                }
-            }
-            
-            // Loading Text
-            Text("Loading your generated options ...")
-                .font(.title) // Adjusted to a smaller, more elegant font
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
-        }
-        .onAppear {
-            for _ in 0..<numberOfLeaves {
-                positions.append(CGPoint(x: CGFloat.random(in: 20...UIScreen.main.bounds.width - 20),
-                                         y: CGFloat.random(in: -100...0)))
-                durations.append(Double.random(in: minDuration...maxDuration))
+                    }
             }
         }
     }
+
+    private func getAnimation(for index: Int) -> Animation {
+        Animation.linear(duration: durations[index])
+            .repeatForever(autoreverses: false)
+            .delay(Double.random(in: 0 ... 2))
+    }
 }
 
-// MARK: Previews
+struct LeafImageView: View {
+    let imageName: String
 
+    var body: some View {
+        Image(imageName)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 60, height: 60)
+    }
+}
 
 struct LeafShape: Shape {
     func path(in rect: CGRect) -> Path {
@@ -264,4 +236,6 @@ struct LeafShape: Shape {
     }
 }
 
-
+#Preview {
+    ResultsView(capturedImage: UIImage(named: "exampleImage"))
+}
