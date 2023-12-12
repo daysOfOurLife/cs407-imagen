@@ -80,13 +80,28 @@ struct ResultsView: View {
         ZStack {
             FallingLeafAnimationView()
                 .frame(maxHeight: .infinity)
-            Text("Loading your generated options")
-                .font(Font.system(size: 16.0, weight: .bold, design: .monospaced))
-                .foregroundColor(.white)
-                .padding()
-                .background(Color.black.opacity(0.7))
-                .cornerRadius(10)
-                .shadow(radius: 5)
+            
+            VStack(spacing: 12.5) {
+                Text("Loading your generated options")
+                    .font(Font.system(size: 16.0, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.black.opacity(0.7))
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Mistake? Retake.")
+                        .font(Font.system(size: 12.0, weight: .bold, design: .monospaced))
+                        .foregroundColor(.black)
+                        .padding(8)
+                        .background(Color.white.opacity(0.7))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                }
+            }
         }
         .background(.green)
     }
