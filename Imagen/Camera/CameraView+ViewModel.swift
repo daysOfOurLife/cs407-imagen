@@ -5,8 +5,8 @@
 //
 
 import AVFoundation
-import os.log
 import Observation
+import os.log
 import SwiftUI
 
 extension CameraView {

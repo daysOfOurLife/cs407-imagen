@@ -65,7 +65,6 @@ struct CameraView: View {
                     .font(Font.system(size: 14.0, weight: .semibold, design: .monospaced))
                     .foregroundStyle(.white)
 
-                
                 ZStack {
                     Capsule()
                         .foregroundStyle(.white)
@@ -75,7 +74,6 @@ struct CameraView: View {
                         .scaleEffect(1.3)
                         .foregroundStyle(.black)
                 }
-                
             }
         }
     }

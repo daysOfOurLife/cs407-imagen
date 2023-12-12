@@ -8,24 +8,23 @@
 import SwiftUI
 
 struct ResultsView: View {
-//    var body: some View {
-//        VStack {
-//            Text("Results")
-//        }
-    
-//    }
-    
+    // MARK: Properties
+
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")) // Replace with your actual API key
     private var capturedImage: UIImage?
-    
+
+    // MARK: Initializers
+
     init(capturedImage: UIImage?) {
         self.capturedImage = capturedImage
         _viewModel = StateObject(wrappedValue: ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")))
         print("Image in ResultsView init:", capturedImage != nil ? "Valid" : "Nil")
     }
-    
+
+    // MARK: Body
+
     var body: some View {
-    
         VStack {
             if viewModel.isAnalyzingImage {
                 FallingLeavesView()
@@ -35,51 +34,75 @@ struct ResultsView: View {
                 TextField("Type your message here", text: $viewModel.userInput)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
-                
+
                 Button("This is not used") {
                     viewModel.sendMessage()
                     viewModel.userInput = "" // Clear the text field after sending
                 }
+                .font(Font.system(size: 16.0, weight: .semibold, design: .monospaced))
+                .foregroundStyle(.green)
                 .padding()
-                
+
                 // Paginated View
                 TabView {
                     ForEach(Array(zip(viewModel.titles.indices, viewModel.titles)), id: \.0) { index, title in
                         VStack {
+                            Spacer()
+
                             Text(title)
-                                .fontWeight(.bold)
-                                .padding(.top)
-                            
+                                .font(Font.system(size: 16.0, weight: .bold, design: .monospaced))
+                                .padding(.vertical)
+
                             if viewModel.imageUrls.indices.contains(index) {
                                 let imageUrl = viewModel.imageUrls[index]
                                 AsyncImage(url: imageUrl) { imagePhase in
                                     switch imagePhase {
                                     case .empty:
                                         ProgressView()
-                                            .frame(width: 200, height: 200)
-                                    case .success(let image):
+                                    case let .success(image):
                                         image
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                            .frame(width: 200, height: 200)
                                     case .failure:
                                         Image(systemName: "photo")
-                                            .frame(width: 200, height: 200)
                                     @unknown default:
                                         EmptyView()
                                     }
                                 }
+                                .frame(width: 200, height: 200)
                             }
-                            
+
                             if viewModel.descriptions.indices.contains(index) {
                                 Text(viewModel.descriptions[index])
+                                    .font(Font.system(size: 14.0, weight: .light, design: .monospaced))
                             }
                         }
                         .padding()
+                        .padding(.bottom, 50)
                     }
                 }
                 .tabViewStyle(PageTabViewStyle()) // Enables swiping
                 .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always)) // Show page indicators
+            }
+        }
+        .navigationBarBackButtonHidden()
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbar {
+            if !viewModel.isAnalyzingImage {
+                ToolbarItem(placement: .topBarLeading) {
+                    HStack {
+                        Spacer()
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image("icon_transparent")
+                                .resizable()
+                                .scaledToFit()
+                                .scaleEffect(1.75)
+                                .foregroundStyle(.black)
+                        }
+                    }
+                }
             }
         }
         .onAppear {
@@ -93,9 +116,7 @@ struct ResultsView: View {
     }
 }
 
-#Preview {
-    ResultsView(capturedImage: UIImage(named: "exampleImage"))
-}
+// MARK: Subviews
 
 struct LeafView: View {
     var body: some View {
@@ -113,13 +134,13 @@ struct FallingLeavesView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            ForEach(0..<numberOfLeaves, id: \.self) { index in
+            ForEach(0 ..< numberOfLeaves, id: \.self) { _ in
                 LeafView()
-                    .position(x: CGFloat.random(in: 0...geometry.size.width), y: start ? geometry.size.height + 20 : -20)
+                    .position(x: CGFloat.random(in: 0 ... geometry.size.width), y: start ? geometry.size.height + 20 : -20)
                     .animation(
                         Animation.linear(duration: duration)
                             .repeatForever(autoreverses: false)
-                            .delay(Double.random(in: 0...2)),
+                            .delay(Double.random(in: 0 ... 2)),
                         value: start
                     )
             }
@@ -130,4 +151,8 @@ struct FallingLeavesView: View {
     }
 }
 
+// MARK: Previews
 
+#Preview {
+    ResultsView(capturedImage: UIImage(named: "exampleImage"))
+}

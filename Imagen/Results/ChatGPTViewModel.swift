@@ -167,7 +167,7 @@ class ChatGPTViewModel: ObservableObject {
 
 
     func analyzeImageAndUpdateUserInput(image: UIImage) {
-        print("Went into the analyze function")
+        print("Went into the analyzeImageAndUpdateUserInput() function. Analyzing user image...")
         self.isAnalyzingImage = true
         analyzeImage(image: image) { [weak self] result in
             DispatchQueue.main.async {
