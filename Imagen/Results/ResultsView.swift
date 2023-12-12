@@ -31,9 +31,14 @@ struct ResultsView: View {
                     .frame(height: 300)
                     .padding()
             } else {
-                TextField("Type your message here", text: $viewModel.userInput)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
+                VStack(alignment: .leading) {
+                    Text("Detected:")
+                    TextField("Type your message here", text: $viewModel.userInput)
+                        .textFieldStyle(.plain)
+                }
+                .padding()
+                .font(Font.system(size: 16.0, weight: .semibold, design: .monospaced))
+
 
                 Button("This is not used") {
                     viewModel.sendMessage()
@@ -89,22 +94,30 @@ struct ResultsView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             if !viewModel.isAnalyzingImage {
-                ToolbarItem(placement: .topBarLeading) {
-                    HStack {
-                        Spacer()
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image("icon_transparent")
-                                .resizable()
-                                .scaledToFit()
-                                .scaleEffect(1.75)
-                                .foregroundStyle(.black)
-                        }
+                ToolbarItem(placement: .principal) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Results")
+                            .font(Font.system(size: 18.0, weight: .semibold, design: .monospaced))
+                            .tint(.primary)
+                    }
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "leaf")
+                            .resizable()
+                            .scaledToFit()
+                            .bold()
+                            .tint(.primary)
                     }
                 }
             }
         }
+
         .onAppear {
             if let image = capturedImage {
                 print("Image is present, calling analyze function")
