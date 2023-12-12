@@ -15,12 +15,12 @@ struct ResultsView: View {
     
 //    }
     
-    @StateObject private var viewModel = ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")) // Replace with your actual API key
+    @StateObject private var viewModel = ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")) // Replace with your actual API key
     private var capturedImage: UIImage?
     
     init(capturedImage: UIImage?) {
         self.capturedImage = capturedImage
-        _viewModel = StateObject(wrappedValue: ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")))
+        _viewModel = StateObject(wrappedValue: ChatGPTViewModel(chatService: ChatGPTService(apiKey: "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")))
         print("Image in ResultsView init:", capturedImage != nil ? "Valid" : "Nil")
     }
     
@@ -28,19 +28,13 @@ struct ResultsView: View {
     
         VStack {
             if viewModel.isAnalyzingImage {
-                FallingLeavesView()
-                    .frame(height: 300)
+                FallingLeafAnimationView()
+                    .frame(maxHeight: .infinity)
                     .padding()
             } else {
                 TextField("Type your message here", text: $viewModel.userInput)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
-                
-                Button("This is not used") {
-                    viewModel.sendMessage()
-                    viewModel.userInput = "" // Clear the text field after sending
-                }
-                .padding()
                 
                 // Paginated View
                 TabView {
@@ -85,7 +79,7 @@ struct ResultsView: View {
         .onAppear {
             if let image = capturedImage {
                 print("Image is present, calling analyze function")
-                viewModel.analyzeImageAndUpdateUserInput(image: image)
+               viewModel.analyzeImageAndUpdateUserInput(image: image)
             } else {
                 print("No image found")
             }
@@ -97,36 +91,125 @@ struct ResultsView: View {
     ResultsView(capturedImage: UIImage(named: "exampleImage"))
 }
 
-struct LeafView: View {
+struct LeafImageView: View {
+    let swayRange: CGFloat
+
     var body: some View {
-        Circle()
-            .frame(width: 10, height: 10)
-            .foregroundColor(.green)
+        Image("leaf5")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 60, height: 60)
+    }
+
+    init() {
+        swayRange = CGFloat.random(in: -30...30)
     }
 }
 
-struct FallingLeavesView: View {
-    @State private var start = false
+//struct FallingLeafAnimationView: View {
+//    let numberOfLeaves: Int = 15
+//    let minDuration: Double = 8   // Minimum duration for fall
+//    let maxDuration: Double = 15  // Maximum duration for fall
+//
+//    @State private var positions: [CGPoint] = []
+//    @State private var durations: [Double] = []
+//
+//    var body: some View {
+//        GeometryReader { geometry in
+//            ForEach(0..<numberOfLeaves, id: \.self) { index in
+//                LeafImageView()
+//                    .position(x: positions.count > index ? positions[index].x : geometry.size.width / 2,
+//                              y: positions.count > index ? positions[index].y : -50)
+//                    .onAppear {
+//                        withAnimation(
+//                            Animation.linear(duration: durations.count > index ? durations[index] : 10)
+//                                .repeatForever(autoreverses: false)
+//                                .delay(Double.random(in: 0...2))
+//                        ) {
+//                            if positions.count > index {
+//                                positions[index] = CGPoint(x: CGFloat.random(in: 20...geometry.size.width - 20),
+//                                                           y: geometry.size.height + 50)
+//                            }
+//                        }
+//                    }
+//            }
+//        }
+//        .onAppear {
+//            // Initialize positions and durations for all leaves
+//            for _ in 0..<numberOfLeaves {
+//                positions.append(CGPoint(x: CGFloat.random(in: 20...UIScreen.main.bounds.width - 20),
+//                                         y: CGFloat.random(in: -100...0)))
+//                durations.append(Double.random(in: minDuration...maxDuration))
+//            }
+//        }
+//    }
+//}
 
-    let numberOfLeaves = 10
-    let duration: Double = 5
+struct FallingLeafAnimationView: View {
+    let numberOfLeaves: Int = 10
+    let minDuration: Double = 8   // Minimum duration for fall
+    let maxDuration: Double = 15  // Maximum duration for fall
+
+    @State private var positions: [CGPoint] = []
+    @State private var durations: [Double] = []
 
     var body: some View {
-        GeometryReader { geometry in
-            ForEach(0..<numberOfLeaves, id: \.self) { index in
-                LeafView()
-                    .position(x: CGFloat.random(in: 0...geometry.size.width), y: start ? geometry.size.height + 20 : -20)
-                    .animation(
-                        Animation.linear(duration: duration)
-                            .repeatForever(autoreverses: false)
-                            .delay(Double.random(in: 0...2)),
-                        value: start
-                    )
+        ZStack {
+            GeometryReader { geometry in
+                ForEach(0..<numberOfLeaves, id: \.self) { index in
+                    LeafImageView()
+                        .position(x: positions.count > index ? positions[index].x : geometry.size.width / 2,
+                                  y: positions.count > index ? positions[index].y : -50)
+                        .onAppear {
+                            withAnimation(
+                                Animation.linear(duration: durations.count > index ? durations[index] : 10)
+                                    .repeatForever(autoreverses: false)
+                                    .delay(Double.random(in: 0...2))
+                            ) {
+                                if positions.count > index {
+                                    positions[index] = CGPoint(x: CGFloat.random(in: 20...geometry.size.width - 20),
+                                                               y: geometry.size.height + 50)
+                                }
+                            }
+                        }
+                }
             }
+            
+            // Loading Text
+            Text("Loading your generated options ...")
+                .font(.title) // Adjusted to a smaller, more elegant font
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
         }
         .onAppear {
-            start = true
+            for _ in 0..<numberOfLeaves {
+                positions.append(CGPoint(x: CGFloat.random(in: 20...UIScreen.main.bounds.width - 20),
+                                         y: CGFloat.random(in: -100...0)))
+                durations.append(Double.random(in: minDuration...maxDuration))
+            }
         }
+    }
+}
+
+
+
+struct LeafShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        // Drawing a simple leaf shape
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addQuadCurve(to: CGPoint(x: rect.minX, y: rect.midY),
+                          control: CGPoint(x: rect.minX, y: rect.minY))
+        path.addQuadCurve(to: CGPoint(x: rect.midX, y: rect.maxY),
+                          control: CGPoint(x: rect.width * 0.25, y: rect.height * 0.75))
+        path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.midY),
+                          control: CGPoint(x: rect.width * 0.75, y: rect.height))
+        path.addQuadCurve(to: CGPoint(x: rect.midX, y: rect.minY),
+                          control: CGPoint(x: rect.maxX, y: rect.minY))
+        path.closeSubpath()
+
+        return path
     }
 }
 

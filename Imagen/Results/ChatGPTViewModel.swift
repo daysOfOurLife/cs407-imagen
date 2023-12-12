@@ -15,8 +15,6 @@ class ChatGPTViewModel: ObservableObject {
 
     private let chatService: ChatGPTService
     
-   // let openAI = OpenAI(Configuration(organizationId: "Personal", apiKey: "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"))
-
     init(chatService: ChatGPTService) {
         self.chatService = chatService
     }
@@ -75,7 +73,7 @@ class ChatGPTViewModel: ObservableObject {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let body: [String: Any] = [
@@ -115,7 +113,7 @@ class ChatGPTViewModel: ObservableObject {
         self.descriptions.removeAll()
         self.imageUrls.removeAll()
 
-        let modifiedInput = "So I need a response for an app that I am writing. Can you give me 5 ways to upcycle a \(userInput)? Think of ways that we can reuse the item as something else that it previously wasent, Can you add a small 250 - 300 word description to each of the ways that you give. Can you also add a space (a \n) between the idea and its following description. Can you skip out any formalities and provide me directly with the points. Can you number them like 1. 2. "
+        let modifiedInput = "So I need a response for an app that I am writing. Can you give me 1 ways to upcycle a \(userInput)? Think of ways that we can reuse the item as something else that it previously wasent, Can you add a small 250 - 300 word description to each of the ways that you give. Can you also add a space (a \n) between the idea and its following description. Can you skip out any formalities and provide me directly with the points. Can you number them like 1. 2. "
 
         chatService.sendMessage(message: modifiedInput) { [weak self] result in
                 DispatchQueue.main.async {
@@ -189,7 +187,7 @@ class ChatGPTViewModel: ObservableObject {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer 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", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let contentPart1: [String: Any] = ["type": "text", "text": AIQuestionair]
