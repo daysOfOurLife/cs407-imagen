@@ -101,6 +101,7 @@ struct ResultsView: View {
                     .textFieldStyle(.roundedBorder)
                     .font(Font.system(size: 14.0, weight: .semibold, design: .monospaced))
                     .foregroundStyle(.green)
+                    .submitLabel(.done)
 
                 Button {
                     viewModel.isAnalyzingImage = true
