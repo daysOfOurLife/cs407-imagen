@@ -154,8 +154,8 @@ class ChatGPTViewModel: ObservableObject {
 
                         self?.titles = tempTitles
                         self?.descriptions = tempDescriptions
-//                        self?.generateImagesForTitles() // TODO: Uncomment when done testing
-                        self?.isAnalyzingImage = false // TODO: remove after testing
+                        self?.generateImagesForTitles() // TODO: Uncomment when done testing
+//                        self?.isAnalyzingImage = false // TODO: remove after testing
 
 
                     case .failure(let error):
