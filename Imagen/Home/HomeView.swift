@@ -25,7 +25,7 @@ struct HomeView: View {
                         newImageButton
 
                         // TODO: Show only if user has existing result
-                        existingResultButton
+//                        existingResultButton
                     }
                     .padding(.top, 100.0)
                     .frame(maxWidth: proxy.size.width * 0.6)

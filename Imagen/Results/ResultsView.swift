@@ -11,14 +11,14 @@ struct ResultsView: View {
     // MARK: Properties
 
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var viewModel = ChatGPTViewModel(chatService: ChatGPTService(apiKey: "API-KEY")) // Replace with your actual API key
+    @StateObject private var viewModel = ChatGPTViewModel(chatService: ChatGPTService(apiKey: "API-KEY-CANNOT-BE-PUSHED-AS-IT-GETS-DISABLED")) // Replace with your actual API key
     private var capturedImage: UIImage?
 
     // MARK: Initializers
 
     init(capturedImage: UIImage?) {
         self.capturedImage = capturedImage
-        _viewModel = StateObject(wrappedValue: ChatGPTViewModel(chatService: ChatGPTService(apiKey: "API-KEY")))
+        _viewModel = StateObject(wrappedValue: ChatGPTViewModel(chatService: ChatGPTService(apiKey: "API-KEY-CANNOT-BE-PUSHED-AS-IT-GETS-DISABLED")))
         print("Image in ResultsView init:", capturedImage != nil ? "Valid" : "Nil")
     }
 
@@ -73,6 +73,8 @@ struct ResultsView: View {
             }
         }
     }
+    
+    // MARK: Subviews
 
     private var loadingView: some View {
         ZStack {
@@ -101,6 +103,7 @@ struct ResultsView: View {
                     .foregroundStyle(.green)
 
                 Button {
+                    viewModel.isAnalyzingImage = true
                     viewModel.sendMessage()
                     viewModel.userInput = "" // Clear the text field after sending
                 } label: {

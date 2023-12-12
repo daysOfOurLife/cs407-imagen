@@ -73,7 +73,7 @@ class ChatGPTViewModel: ObservableObject {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer API-KEY", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer API-KEY-CANNOT-BE-PUSHED-AS-IT-GETS-DISABLED", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let body: [String: Any] = [
@@ -190,7 +190,7 @@ class ChatGPTViewModel: ObservableObject {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer API-KEY", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer API-KEY-CANNOT-BE-PUSHED-AS-IT-GETS-DISABLED", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let contentPart1: [String: Any] = ["type": "text", "text": AIQuestionair]

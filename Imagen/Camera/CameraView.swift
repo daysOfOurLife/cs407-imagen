@@ -9,6 +9,7 @@ import SwiftUI
 struct CameraView: View {
     // MARK: Properties
 
+    @Environment(\.dismiss) private var dismiss
     @State private var viewModel = ViewModel()
 
     // MARK: Body
@@ -28,7 +29,18 @@ struct CameraView: View {
                 buttonStack
             }
         }
+        .navigationBarBackButtonHidden()
         .background(.black)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.green)
+                }
+            }
+        }
         .onAppear {
             viewModel.camera.isPhotoTaken = false
         }
