@@ -31,32 +31,41 @@ struct ResultsView: View {
                     .frame(height: 300)
                     .padding()
             } else {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 8.0) {
                     Text("Detected:")
-                    TextField("Type your message here", text: $viewModel.userInput)
-                        .textFieldStyle(.plain)
-                }
-                .padding()
-                .font(Font.system(size: 16.0, weight: .semibold, design: .monospaced))
+                        .font(Font.system(size: 24.0, weight: .bold, design: .monospaced))
+                    
+                    HStack {
+                        TextField("Unleash your creativity...", text: $viewModel.userInput)
+                            .textFieldStyle(.roundedBorder)
+                            .font(Font.system(size: 14.0, weight: .semibold, design: .monospaced))
+                        
+                        Button {
+                            viewModel.sendMessage()
+                            viewModel.userInput = "" // Clear the text field after sending
+                        } label: {
+                            Image(systemName: "arrow.counterclockwise.circle")
+                                .scaleEffect(1.25)
+                                .foregroundStyle(.green)
+                        }
+                        
+                    }
+                    .foregroundStyle(.gray)
+                    
+                    Text("Edit above if something's not quite right.")
+                        .font(Font.system(size: 13.5, weight: .regular, design: .monospaced))
+                        .foregroundStyle(.gray)
 
-
-                Button("This is not used") {
-                    viewModel.sendMessage()
-                    viewModel.userInput = "" // Clear the text field after sending
                 }
-                .font(Font.system(size: 16.0, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.green)
                 .padding()
 
                 // Paginated View
                 TabView {
                     ForEach(Array(zip(viewModel.titles.indices, viewModel.titles)), id: \.0) { index, title in
                         VStack {
-                            Spacer()
 
                             Text(title)
                                 .font(Font.system(size: 16.0, weight: .bold, design: .monospaced))
-                                .padding(.vertical)
 
                             if viewModel.imageUrls.indices.contains(index) {
                                 let imageUrl = viewModel.imageUrls[index]
@@ -75,6 +84,7 @@ struct ResultsView: View {
                                     }
                                 }
                                 .frame(width: 200, height: 200)
+                                .padding(.vertical)
                             }
 
                             if viewModel.descriptions.indices.contains(index) {
