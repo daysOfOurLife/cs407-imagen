@@ -19,25 +19,6 @@ class ChatGPTViewModel: ObservableObject {
         self.chatService = chatService
     }
     
-//    func generateImagesForTitles() {
-//        print("Went into the images generation function")
-//        for title in titles {
-//            let prompt = "generate an image of a \(userInput) being upcycled as an \(title). Make it realistic as possible. Use pastel colours"
-//
-//            generateImage(with: prompt) { [weak self] result in
-//                DispatchQueue.main.async {
-//                    switch result {
-//                    case .success(let url):
-//                        self?.imageUrls.append(url)
-//                    case .failure(let error):
-//                        print("Error generating image: \(error)")
-//                        // Handle error, perhaps by appending a placeholder URL or image
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
     func generateImagesForTitles() {
         var tempImageUrls = [Int: URL]() // Temporary dictionary to store URLs with indices
         self.isAnalyzingImage = true

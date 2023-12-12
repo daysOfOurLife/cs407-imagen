@@ -74,49 +74,6 @@ class ChatGPTService {
                 
                 let lines = content.components(separatedBy: .newlines)
                 print(lines)
-                // Arrays to hold the parts before and after the colon
-               // var titles = [String]()
-                //var descriptions = [String]()
-                
-                // Iterate over the lines array, looking for titles and descriptions
-//                for (index, line) in lines.enumerated() {
-//                    if line.range(of: #"^\d+\.\s"#, options: .regularExpression) != nil {
-//                        // This is a title line
-//                        let title = line.trimmingCharacters(in: .whitespacesAndNewlines)
-//                        titles.append(title)
-//                    } else if !line.isEmpty && !line.hasSuffix("upcycle your old vases into something new and useful.") && index > 0 && lines[index - 1].range(of: #"^\d+\.\s"#, options: .regularExpression) != nil {
-//                        // This is a description line, which comes after a title line
-//                        let description = line.trimmingCharacters(in: .whitespacesAndNewlines)
-//                        descriptions.append(description)
-//                    }
-//                }
-                
-//                for (index, line) in lines.enumerated() {
-//                    if line.range(of: #"^\d+\.\s"#, options: .regularExpression) != nil {
-//                        // This is a title line
-//                        let title = line.trimmingCharacters(in: .whitespacesAndNewlines)
-//                        titles.append(title)
-//                    } else if !line.isEmpty && index > 0 && lines[index - 1].range(of: #"^\d+\.\s"#, options: .regularExpression) != nil {
-//                        // This is a description line, which comes after a title line
-//                        let description = line.trimmingCharacters(in: .whitespacesAndNewlines)
-//                        if descriptions.isEmpty || descriptions.last != "" {
-//                            // Start a new description
-//                            descriptions.append(description)
-//                        } else {
-//                            // Continue the existing description
-//                            descriptions[descriptions.count - 1] += "\n\n" + description
-//                        }
-//                    }
-//                }
-//
-//                // If there's an empty description at the end, remove it
-//                if let last = descriptions.last, last.isEmpty {
-//                    descriptions.removeLast()
-//                }
-//
-//                // Log titles and descriptions
-//                print("Titles:", titles)
-//                print("Descriptions:", descriptions)
                 
                 completion(.success(content))
             } catch {
