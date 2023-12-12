@@ -27,7 +27,7 @@ struct ResultsView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                if !viewModel.isAnalyzingImage {
+                if viewModel.isAnalyzingImage {
                     loadingView
                 } else {
                     heading
